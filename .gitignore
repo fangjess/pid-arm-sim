@@ -1,0 +1,7 @@
+build/
+simulation
+*.so
+*.o
+.vscode/
+__pycache__/
+*.pyc
