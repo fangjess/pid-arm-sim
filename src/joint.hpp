@@ -1,16 +1,21 @@
 #pragma once
 #include "motor_simulator.hpp"
 #include "pid_controller.hpp"
+#include "axis.hpp"
 
 class Joint {
     PIDController pid;
     MotorSimulator motor;
     float target;
-    float gravity; // how much gravity? e.g. 45 degree mount = 0.5 gravity
+    float armLength; // arm length in metres
+    float mass; // arm/load mass in kg
+    Axis axis; // axis of movement
 
 public:
     Joint() {}
-    Joint(float kp, float ki, float kd, float inertia, float damping, float gravity) {}
     void setTarget(float t) {}
+    void setGravity(float g) {}
+    void setArmLength(float l) {}
+    void toggleAxis() {}
     float step(float dt) {} // torque in from controller, position out from motor
 };
