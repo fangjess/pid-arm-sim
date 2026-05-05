@@ -6,8 +6,9 @@ class Arm {
     std::vector<Joint> joints;
 
 public:
-    void addJoint(Joint j) {}
-    void removeJoint() {}
-    void setTarget(int i, float t) {}
-    void step(float dt) {}
+    void addJoint(Joint j);
+    void removeJoint();
+    void setTarget(int i, float t);
+    float getAngle(int i);
+    void step(float dt);
 };

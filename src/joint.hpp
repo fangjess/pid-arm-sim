@@ -12,10 +12,11 @@ class Joint {
     Axis axis; // axis of movement
 
 public:
-    Joint() {}
-    void setTarget(float t) {}
-    void setGravity(float g) {}
-    void setArmLength(float l) {}
-    void toggleAxis() {}
-    float step(float dt) {} // torque in from controller, position out from motor
+    Joint();
+    void setTarget(float t);
+    void setGravity(float g);
+    void setArmLength(float l);
+    float getAngle();
+    void toggleAxis();
+    float step(float dt); // torque in from controller, position out from motor
 };

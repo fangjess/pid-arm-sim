@@ -23,6 +23,10 @@ void Joint::toggleAxis() {
     }
 }
 
+float Joint::getAngle() {
+    return motor.getAngle();
+}
+
 float Joint::step(float dt) {
     float error = target - motor.getAngle();
     float torque = pid.step(error, dt);

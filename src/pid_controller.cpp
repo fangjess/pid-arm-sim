@@ -1,7 +1,7 @@
 #include "pid_controller.hpp"
 
 PIDController::PIDController()
-    : kp(10.0f), ki(0.01f), kd(0.5f), integral(0.0f), prevError(0.0f) {}
+    : kp(0.4f), ki(0.01f), kd(0.1f), integral(0.0f), prevError(0.0f) {}
 
 PIDController::PIDController(float a, float b, float c)
     : kp(a), ki(b), kd(c), integral(0.0f), prevError(0.0f) {}

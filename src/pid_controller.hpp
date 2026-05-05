@@ -15,7 +15,7 @@ class PIDController {
     float prevError;
 
 public:
-    PIDController() {}
-    PIDController(float kp, float ki, float kd) {}
-    float step(float error, float dt) {}
+    PIDController();
+    PIDController(float kp, float ki, float kd);
+    float step(float error, float dt);
 };
