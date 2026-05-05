@@ -9,5 +9,6 @@ class MotorSimulator {
 public:
     MotorSimulator() {}
     MotorSimulator(float inertia, float damping) {}
+    float getAngle() {}
     float step(float torque, float dt) {}
 };

@@ -7,7 +7,7 @@
     integral is accumulation of error from past moments
 */
 
-class PIDController  {
+class PIDController {
     float kp;
     float ki;
     float kd;
