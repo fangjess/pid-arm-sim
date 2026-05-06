@@ -5,3 +5,5 @@ simulation
 .vscode/
 __pycache__/
 *.pyc
+venv/
+test.py
