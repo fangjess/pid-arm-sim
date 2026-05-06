@@ -27,6 +27,14 @@ float Joint::getAngle() {
     return motor.getAngle();
 }
 
+Axis Joint::getAxis() {
+    return axis;
+}
+
+float Joint::getArmLength() {
+    return armLength;
+}
+
 float Joint::step(float dt) {
     float error = target - motor.getAngle();
     float torque = pid.step(error, dt);
@@ -35,7 +43,8 @@ float Joint::step(float dt) {
     // currently affect of gravity on each joint is independent
     // may implement propagation of angle changes in future
     if(axis == Axis::Vertical) {
-        float gravityForce = mass * 9.81f * armLength * cos(motor.getAngle());
+        float angleRadians = motor.getAngle() * M_PI / 180.0f;
+        float gravityForce = mass * 9.81f * armLength * cos(angleRadians);
         torque -= gravityForce;
     }
 
