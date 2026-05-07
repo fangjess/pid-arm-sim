@@ -14,5 +14,6 @@ public:
     float getAngle(int i);
     Axis getAxis(int i);
     float getLength(int i);
+    void toggleAxis(int i);
     void step(float dt);
 };

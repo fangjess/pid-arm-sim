@@ -32,6 +32,10 @@ float Arm::getLength(int i) {
     return joints[i].getArmLength();
 }
 
+void Arm::toggleAxis(int i) {
+    joints[i].toggleAxis();
+}
+
 void Arm::step(float dt) {
     for (Joint& j : joints) {
         j.step(dt);
