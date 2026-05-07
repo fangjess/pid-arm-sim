@@ -11,7 +11,10 @@ Joint::Joint()
     motor = MotorSimulator();
 }
 
-void Joint::setTarget(float t) {target = t;}
+void Joint::setTarget(float t) {
+    target = t;
+    pid.resetIntegral();
+}
 
 void Joint::setArmLength(float l) {armLength = l;}
 
@@ -37,6 +40,13 @@ float Joint::getArmLength() {
 
 float Joint::step(float dt) {
     float error = target - motor.getAngle();
+    
+    // wrap angles for horizontal rotation
+    if (axis == Axis::Horizontal) {
+        while (error > 180.0f)  error -= 360.0f;
+        while (error < -180.0f) error += 360.0f;
+    }
+
     float torque = pid.step(error, dt);
 
     // gravity force is calculated if axis of movement is vertical

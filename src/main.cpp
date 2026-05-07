@@ -2,17 +2,33 @@
 #include <iostream>
 
 int main() {
-    float dt = 0.001f;
-
     Arm arm;
-    arm.addJoint(Joint());
-    arm.setTarget(0, 90.0f);
-
-    // while(true) {
-    //     arm.step(dt);
-    // }
-    for (int i = 0; i < 700; i++) {
+    arm.addJoint(Joint());  // default horizontal joint
+    
+    arm.setTarget(0, 170.0f);  // target near the wrap boundary
+    
+    float dt = 0.001f;
+    for (int i = 0; i < 5000; i++) {
         arm.step(dt);
-        std::cout << "tick " << i << ": " << arm.getAngle(0) << "°\n";
+        if (i % 100 == 0) {  // print every 100 ticks
+            std::cout << "tick " << i 
+                      << " angle: " << arm.getAngle(0) 
+                      << "\n";
+        }
     }
+
+    // now set target on the other side of the boundary
+    std::cout << "\n--- changing target to -170 ---\n\n";
+    arm.setTarget(0, -170.0f);
+
+    for (int i = 0; i < 5000; i++) {
+        arm.step(dt);
+        if (i % 100 == 0) {
+            std::cout << "tick " << i 
+                      << " angle: " << arm.getAngle(0) 
+                      << "\n";
+        }
+    }
+
+    return 0;
 }

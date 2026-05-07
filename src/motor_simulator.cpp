@@ -12,5 +12,7 @@ float MotorSimulator::step(float torque, float dt) {
     float acceleration = (torque - (damping * velocity)) / inertia;
     velocity += acceleration * dt;
     angle += velocity * dt;
+    while (angle > 180.0f)  angle -= 360.0f;
+    while (angle < -180.0f) angle += 360.0f;
     return angle;
 }

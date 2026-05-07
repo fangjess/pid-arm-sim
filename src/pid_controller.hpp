@@ -17,5 +17,6 @@ class PIDController {
 public:
     PIDController();
     PIDController(float kp, float ki, float kd);
+    void resetIntegral();
     float step(float error, float dt);
 };
