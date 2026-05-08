@@ -14,6 +14,7 @@ class Joint {
 public:
     Joint();
     void setTarget(float t);
+    float getTarget();
     void setGravity(float g);
     void setArmLength(float l);
     float getAngle();

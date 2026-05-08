@@ -40,7 +40,7 @@ class SideViewCanvas(QWidget):
                 if attachedHorizontal:
                     visibility = math.cos(accumulatedRotation)
                 else:
-                    visibility = 1.0 # full visibility if no rotation
+                    visibility = 1.0
                 x2 = x1 + length * math.cos(angleRad) * visibility 
                 y2 = y1 - length * math.sin(angleRad)
 
@@ -90,15 +90,20 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setFixedSize(1000, 600)
-        self.setWindowTitle("pid-arm-sim")
+        self.setWindowTitle("PID Robotic Arm Simulator")
+        self.MAX_JOINTS = 5
+        self.jointPanels = []
 
-        # create arm
+        # # initial setup
         self.arm = arm_sim.Arm()
-        self.arm.addJoint(arm_sim.Joint())  # horizontal base joint
-        self.arm.addJoint(arm_sim.Joint())  # vertical joint
-        self.arm.toggleAxis(1)    
-        self.arm.setTarget(0, 45.0)         # rotate base 45°
-        self.arm.setTarget(1, 30.0)         # pitch vertical joint up 30°
+        # self.addJoint()
+        # self.addJoint()
+        # self.arm.toggleAxis(1)
+        # self.jointPanels[1].findChild(QPushButton).setText("Vertical Axis")
+        # self.arm.setTarget(0, 45.0) # rotate base 45 deg
+        # self.arm.setTarget(1, 30.0) # pitch vertical joint up 30 deg
+        # self.jointPanels[0].targetSlider.setValue(45)
+        # self.jointPanels[1].targetSlider.setValue(30)
 
         # canvases
         self.sideCanvas = SideViewCanvas(self.arm)
@@ -106,19 +111,123 @@ class MainWindow(QMainWindow):
         self.topCanvas = TopViewCanvas(self.arm)
         self.topCanvas.setFixedSize(450, 500)
 
-        # layout
-        layout = QHBoxLayout()
-        layout.addWidget(self.sideCanvas)
-        layout.addWidget(self.topCanvas)
+        # canvas layout
+        sideLayout = QHBoxLayout()
+        sideLayout.addWidget(self.sideCanvas)
+        sideCanvasGroup = QGroupBox("Side View")
+        sideCanvasGroup.setLayout(sideLayout)
+
+        topLayout = QHBoxLayout()
+        topLayout.addWidget(self.topCanvas)
+        topCanvasGroup = QGroupBox("Top View")
+        topCanvasGroup.setLayout(topLayout)
+
+        canvasLayout = QHBoxLayout()
+        canvasLayout.addWidget(sideCanvasGroup)
+        canvasLayout.addWidget(topCanvasGroup)
+
+        # control panel layout
+        self.controlLayout = QVBoxLayout()
+        self.controlLayout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
+        
+        # spinbox for adding/removing joints
+        self.jointAdder = QSpinBox()
+        self.jointAdder.setRange(0, self.MAX_JOINTS)
+        self.jointAdder.setValue(2)
+        self.jointAdder.valueChanged.connect(self.onJointCountChange)
+        self.controlLayout.addWidget(self.jointAdder)
+
+        # initial setup
+        self.addJoint()
+        self.addJoint()
+        self.arm.toggleAxis(1)
+        self.jointPanels[1].findChild(QPushButton).setText("Vertical Axis")
+        self.arm.setTarget(0, 45.0) # rotate base 45 deg
+        self.arm.setTarget(1, 30.0) # pitch vertical joint up 30 deg
+        self.jointPanels[0].targetSlider.setValue(45)
+        self.jointPanels[1].targetSlider.setValue(30)
+
+        mainLayout = QHBoxLayout()
+        mainLayout.addLayout(canvasLayout)
+        mainLayout.addLayout(self.controlLayout)
 
         container = QWidget()
-        container.setLayout(layout)
+        container.setLayout(mainLayout)
         self.setCentralWidget(container)
 
-        # timer
+        # update canvas
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
         self.timer.start(16)
+
+    def onTargetChange(self, index, target):
+        self.arm.setTarget(index, float(target))
+    
+    def onAxisChange(self, index, button):
+        self.arm.toggleAxis(index)
+        axis = self.arm.getAxis(index)
+        if axis == arm_sim.Axis.Horizontal:
+            button.setText("Horizontal Axis")
+        else:
+            button.setText("Vertical Axis")
+
+    def createJointPanel(self, index):
+        group = QGroupBox(f"Joint {index}")
+        layout = QVBoxLayout()
+
+        axis = self.arm.getAxis(index)
+        axisLabel = "Vertical Axis" if axis == arm_sim.Axis.Vertical else "Horizontal Axis"
+        axisButton = QPushButton(axisLabel)
+        axisButton.clicked.connect(
+            lambda checked, i=index, btn=axisButton: self.onAxisChange(i, btn)
+        )
+        layout.addWidget(axisButton)
+
+        target = self.arm.getTarget(index)
+        targetSlider = QSlider()
+        targetSlider.setMinimum(-360)
+        targetSlider.setMaximum(360)
+        targetSlider.setSingleStep(1)
+        targetSlider.setValue(int(target))
+        targetSlider.valueChanged.connect(
+            lambda val, i=index: self.onTargetChange(i, val)
+        )
+        layout.addWidget(targetSlider)
+
+        group.setLayout(layout)
+        group.targetSlider = targetSlider
+        group.axisButton = axisButton
+        return group
+
+    def addJoint(self):
+        currentJointCount = self.arm.getJointCount()
+        if currentJointCount >= 5:
+            return
+        else:
+            self.arm.addNewJoint()
+            newPanel = self.createJointPanel(currentJointCount)
+            self.jointPanels.append(newPanel)
+            self.controlLayout.addWidget(newPanel)
+
+
+    def popJoint(self):
+        currentJointCount = self.arm.getJointCount()
+        if currentJointCount <= 0:
+            return
+        else:
+            self.arm.popJoint()
+            poppedPanel = self.jointPanels.pop()
+            self.controlLayout.removeWidget(poppedPanel)
+            poppedPanel.deleteLater()
+
+    def onJointCountChange(self, count):
+        current = self.arm.getJointCount()
+        if current < count:
+            for i in range(count - current):
+                self.addJoint()
+        else:
+            for i in range(current - count):
+                self.popJoint()
 
     def tick(self):
         self.arm.step(0.001)

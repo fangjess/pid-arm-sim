@@ -16,6 +16,10 @@ void Joint::setTarget(float t) {
     pid.resetIntegral();
 }
 
+float Joint::getTarget() {
+    return target;
+}
+
 void Joint::setArmLength(float l) {armLength = l;}
 
 void Joint::toggleAxis() {

@@ -8,6 +8,11 @@ void Arm::addJoint(Joint j) {
     joints.push_back(j);
 }
 
+void Arm::addNewJoint() {
+    Joint newJoint = Joint();
+    joints.push_back(newJoint);
+}
+
 void Arm::popJoint() {
     joints.pop_back();
 }
@@ -18,6 +23,10 @@ void Arm::removeJoint(int i) {
 
 void Arm::setTarget(int i, float t) {
     joints[i].setTarget(t);
+}
+
+float Arm::getTarget(int i) {
+    return joints[i].getTarget();
 }
 
 float Arm::getAngle(int i) {

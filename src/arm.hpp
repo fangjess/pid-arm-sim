@@ -8,9 +8,11 @@ class Arm {
 public:
     int getJointCount();
     void addJoint(Joint j);
+    void addNewJoint();
     void popJoint();
     void removeJoint(int i);
     void setTarget(int i, float t);
+    float getTarget(int i);
     float getAngle(int i);
     Axis getAxis(int i);
     float getLength(int i);
