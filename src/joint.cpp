@@ -42,6 +42,14 @@ float Joint::getArmLength() {
     return armLength;
 }
 
+float Joint::getKp() {
+    return pid.getKp();
+}
+
+void Joint::setKp(float f) {
+    pid.setKp(f);
+}
+
 float Joint::step(float dt) {
     float error = target - motor.getAngle();
     

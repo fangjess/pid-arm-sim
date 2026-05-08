@@ -24,5 +24,7 @@ PYBIND11_MODULE(arm_sim, m) {
         .def("getLength", &Arm::getLength)
         .def("toggleAxis", &Arm::toggleAxis)
         .def("getJointCount", &Arm::getJointCount)
+        .def("getKp", &Arm::getKp)
+        .def("setKp", &Arm::setKp)
         .def("step", &Arm::step);
 }

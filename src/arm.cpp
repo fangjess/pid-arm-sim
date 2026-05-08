@@ -45,6 +45,14 @@ void Arm::toggleAxis(int i) {
     joints[i].toggleAxis();
 }
 
+float Arm::getKp(int i) {
+    return joints[i].getKp();
+}
+
+void Arm::setKp(int i, float f) {
+    joints[i].setKp(f);
+}
+
 void Arm::step(float dt) {
     for (Joint& j : joints) {
         j.step(dt);

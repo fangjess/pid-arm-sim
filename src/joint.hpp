@@ -21,5 +21,7 @@ public:
     void toggleAxis();
     Axis getAxis();
     float getArmLength();
+    float getKp();
+    void setKp(float f);
     float step(float dt); // torque in from controller, position out from motor
 };

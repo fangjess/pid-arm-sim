@@ -17,5 +17,7 @@ public:
     Axis getAxis(int i);
     float getLength(int i);
     void toggleAxis(int i);
+    float getKp(int i);
+    void setKp(int i, float f);
     void step(float dt);
 };

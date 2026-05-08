@@ -18,5 +18,7 @@ public:
     PIDController();
     PIDController(float kp, float ki, float kd);
     void resetIntegral();
+    float getKp();
+    void setKp(float f);
     float step(float error, float dt);
 };

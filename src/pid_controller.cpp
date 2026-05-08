@@ -11,6 +11,10 @@ void PIDController::resetIntegral() {
     prevError = 0;
 }
 
+float PIDController::getKp() { return kp; }
+
+void PIDController::setKp(float f) { kp = f; }
+
 float PIDController::step(float error, float dt) {
     float de = error - prevError;
     while (de > 180.0f)  de -= 360.0f;

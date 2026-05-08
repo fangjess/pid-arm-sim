@@ -94,16 +94,8 @@ class MainWindow(QMainWindow):
         self.MAX_JOINTS = 5
         self.jointPanels = []
 
-        # # initial setup
+        # create arm object
         self.arm = arm_sim.Arm()
-        # self.addJoint()
-        # self.addJoint()
-        # self.arm.toggleAxis(1)
-        # self.jointPanels[1].findChild(QPushButton).setText("Vertical Axis")
-        # self.arm.setTarget(0, 45.0) # rotate base 45 deg
-        # self.arm.setTarget(1, 30.0) # pitch vertical joint up 30 deg
-        # self.jointPanels[0].targetSlider.setValue(45)
-        # self.jointPanels[1].targetSlider.setValue(30)
 
         # canvases
         self.sideCanvas = SideViewCanvas(self.arm)
@@ -132,6 +124,7 @@ class MainWindow(QMainWindow):
         
         # spinbox for adding/removing joints
         self.jointAdder = QSpinBox()
+        self.jointAdder.setSuffix(" Joint(s)")
         self.jointAdder.setRange(0, self.MAX_JOINTS)
         self.jointAdder.setValue(2)
         self.jointAdder.valueChanged.connect(self.onJointCountChange)
@@ -160,8 +153,9 @@ class MainWindow(QMainWindow):
         self.timer.timeout.connect(self.tick)
         self.timer.start(16)
 
-    def onTargetChange(self, index, target):
+    def onTargetChange(self, index, target, label):
         self.arm.setTarget(index, float(target))
+        label.setText(f"Target: {target}°")
     
     def onAxisChange(self, index, button):
         self.arm.toggleAxis(index)
@@ -171,10 +165,16 @@ class MainWindow(QMainWindow):
         else:
             button.setText("Vertical Axis")
 
+    def onKpChange(self, index, val, label):
+            kp = val / 100.0  # convert to float
+            self.arm.setKp(index, kp)
+            label.setText(f"Kp: {kp:.2f}")
+
     def createJointPanel(self, index):
         group = QGroupBox(f"Joint {index}")
-        layout = QVBoxLayout()
+        layout = QHBoxLayout()
 
+        # axis toggle button
         axis = self.arm.getAxis(index)
         axisLabel = "Vertical Axis" if axis == arm_sim.Axis.Vertical else "Horizontal Axis"
         axisButton = QPushButton(axisLabel)
@@ -183,16 +183,33 @@ class MainWindow(QMainWindow):
         )
         layout.addWidget(axisButton)
 
+        # target angle slider
         target = self.arm.getTarget(index)
+        targetLabel = QLabel(f"Target: {int(target)}°")
         targetSlider = QSlider()
-        targetSlider.setMinimum(-360)
-        targetSlider.setMaximum(360)
+        targetSlider.setMinimum(-179)
+        targetSlider.setMaximum(179)
         targetSlider.setSingleStep(1)
         targetSlider.setValue(int(target))
         targetSlider.valueChanged.connect(
-            lambda val, i=index: self.onTargetChange(i, val)
+            lambda val, i=index, l=targetLabel: self.onTargetChange(i, val, l)
         )
+        layout.addWidget(targetLabel)
         layout.addWidget(targetSlider)
+
+        # Kp gain slider, must scale
+        currentKp = self.arm.getKp(index)
+        kpLabel = QLabel(f"Kp multiplier: {float(currentKp)}")
+        kpSlider = QSlider()
+        kpSlider.setMinimum(0)
+        kpSlider.setMaximum(500)
+        kpSlider.setSingleStep(5)
+        kpSlider.setValue(int(currentKp * 100))  # convert float to int scale
+        kpSlider.valueChanged.connect(
+            lambda val, i=index, l=kpLabel: self.onKpChange(i, val, l)
+        )
+        layout.addWidget(kpLabel)
+        layout.addWidget(kpSlider)
 
         group.setLayout(layout)
         group.targetSlider = targetSlider
