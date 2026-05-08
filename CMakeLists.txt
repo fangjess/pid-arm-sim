@@ -27,3 +27,14 @@ pybind11_add_module(arm_sim
     src/bindings.cpp
 )
 target_link_libraries(arm_sim PRIVATE physics)
+
+find_package(GTest REQUIRED)
+add_executable(tests
+    tests/test_pid.cpp
+    tests/test_motor.cpp
+)
+target_link_libraries(tests
+    physics
+    GTest::GTest
+    GTest::Main
+)
