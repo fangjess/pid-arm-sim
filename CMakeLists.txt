@@ -3,7 +3,11 @@ project(pid-arm-sim)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(pybind11_DIR "/home/fangjess/projects/pid-arm-sim/venv/lib/python3.10/site-packages/pybind11/share/cmake/pybind11")
+execute_process(
+    COMMAND python3 -m pybind11 --cmakedir
+    OUTPUT_VARIABLE pybind11_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 find_package(pybind11 REQUIRED)
 
 add_library(physics SHARED
