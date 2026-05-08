@@ -120,7 +120,15 @@ class MainWindow(QMainWindow):
 
         # control panel layout
         self.controlLayout = QVBoxLayout()
-        self.controlLayout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
+        self.controlLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+        scrollWidget = QWidget()
+        scrollWidget.setLayout(self.controlLayout)
+
+        scrollPanel = QScrollArea()
+        scrollPanel.setWidget(scrollWidget)
+        scrollPanel.setWidgetResizable(True)
+        scrollPanel.setFixedWidth(250)
         
         # spinbox for adding/removing joints
         self.jointAdder = QSpinBox()
@@ -142,7 +150,7 @@ class MainWindow(QMainWindow):
 
         mainLayout = QHBoxLayout()
         mainLayout.addLayout(canvasLayout)
-        mainLayout.addLayout(self.controlLayout)
+        mainLayout.addWidget(scrollPanel)
 
         container = QWidget()
         container.setLayout(mainLayout)
@@ -172,7 +180,7 @@ class MainWindow(QMainWindow):
 
     def createJointPanel(self, index):
         group = QGroupBox(f"Joint {index}")
-        layout = QHBoxLayout()
+        layout = QVBoxLayout()
 
         # axis toggle button
         axis = self.arm.getAxis(index)
@@ -186,7 +194,7 @@ class MainWindow(QMainWindow):
         # target angle slider
         target = self.arm.getTarget(index)
         targetLabel = QLabel(f"Target: {int(target)}°")
-        targetSlider = QSlider()
+        targetSlider = QSlider(Qt.Orientation.Horizontal)
         targetSlider.setMinimum(-179)
         targetSlider.setMaximum(179)
         targetSlider.setSingleStep(1)
@@ -200,7 +208,7 @@ class MainWindow(QMainWindow):
         # Kp gain slider, must scale
         currentKp = self.arm.getKp(index)
         kpLabel = QLabel(f"Kp multiplier: {float(currentKp)}")
-        kpSlider = QSlider()
+        kpSlider = QSlider(Qt.Orientation.Horizontal)
         kpSlider.setMinimum(0)
         kpSlider.setMaximum(500)
         kpSlider.setSingleStep(5)
