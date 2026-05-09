@@ -191,6 +191,11 @@ class MainWindow(QMainWindow):
         )
         layout.addWidget(axisButton)
 
+        # current angle display
+        currentAngle = self.arm.getAngle(index)
+        currentAngleLabel = QLabel(f"Current Angle: {int(currentAngle)}°")
+        layout.addWidget(currentAngleLabel)
+
         # target angle slider
         target = self.arm.getTarget(index)
         targetLabel = QLabel(f"Target: {int(target)}°")
@@ -222,6 +227,7 @@ class MainWindow(QMainWindow):
         group.setLayout(layout)
         group.targetSlider = targetSlider
         group.axisButton = axisButton
+        group.currentAngleLabel = currentAngleLabel
         return group
 
     def addJoint(self):
@@ -258,6 +264,10 @@ class MainWindow(QMainWindow):
         self.arm.step(0.001)
         self.sideCanvas.update()
         self.topCanvas.update()
+
+        for i, panel in enumerate(self.jointPanels):
+            currentAngle = self.arm.getAngle(i)
+            panel.currentAngleLabel.setText(f"Current Angle: {int(currentAngle)}°")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
