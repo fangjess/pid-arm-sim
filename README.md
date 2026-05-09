@@ -8,16 +8,22 @@ The simulator models a multi-joint robotic arm where each joint is independently
 - 2d kinematics
 - PyQt6 GUI
 
+## Features
+- 2D top-down and side view rendering of arm movement
+- Control each joint motor individually: "Current angle" shows how close arm is to your desired target angle, toggle axis of movement for each joint
+- Live tuning of PID formula: adjust Kp multiplier to change motor aggressiveness
+- Effect of gravity on movement of vertical-axis arms: force of gravity affects torque applied to arms pitching up/down
+
 ## Development Notes
 This project was built as a learning exercise in C++ and motion control systems. Documentation and AI assistance (Claude) was consulted throughout development to understand concepts such as PID control, rotational physics and language syntax. Architectural decisions, design choices and debugging work are my own.
 
-## Challenges
+### Challenges
 - Applying PID control theory and rotational physics, torque calculations
-- CMake build system
+- Using CMake build system
 - PyQt6 devlopment, canvas rendering, foreshortening
 
 ## Demo
-https://github.com/user-attachments/assets/304731a4-64b7-43ac-959e-8390f241dddc
+https://github.com/user-attachments/assets/8e6708c7-718d-4ad2-9a7e-de59c03dfdc0
 
 ## Class Diagram
 <img width="1320" height="1297" alt="UML class" src="https://github.com/user-attachments/assets/8ca3ae89-a693-4d6b-a0e7-5ff2c8ecb845" />
@@ -27,8 +33,7 @@ Made using Figma
 <img width="1041" height="688" alt="PID Arm Simulator Wireframe" src="https://github.com/user-attachments/assets/9a0fe472-00fb-422a-a366-49f390b89bdb" />
 
 ## To Add:
-- Control panel showing current angle for comparison to target angle
 - Graphical representation of each arms' movement
 - Torque clamping; currently there's technically no limit on how much torque can be produced
-- Effect of gravity on joints
+- Propagation of effect of gravity on joints: currently effect of gravity does not accumulate, each joint reacts to gravity as its own isolated system.
 - Ki and Kd gain sliders
