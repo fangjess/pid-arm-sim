@@ -36,4 +36,5 @@ Made using Figma
 - Graphical representation of each arms' movement
 - Torque clamping; currently there's technically no limit on how much torque can be produced
 - Propagation of effect of gravity on joints: currently effect of gravity does not accumulate, each joint reacts to gravity as its own isolated system.
+- Adjustment of arm length and mass to affect gravity; right now just has 1 default length and mass
 - Ki and Kd gain sliders
