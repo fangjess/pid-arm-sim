@@ -1,13 +1,6 @@
 # pid-arm-sim
 The simulator models a multi-joint robotic arm where each joint is independently controlled by a PID controller. The user can configure up to five joints, toggle each between horizontal and vertical axes of rotation, tune the PID formula live and set target angles, watching the arm move in real time.
 
-## Concepts
-- PID Control theory
-- C++/Python interop
-- Rotational physics simulation
-- 2d kinematics
-- PyQt6 GUI
-
 ## Features
 - 2D top-down and side view rendering of arm movement
 - Control each joint motor individually: "Current angle" shows how close arm is to your desired target angle, toggle axis of movement for each joint
@@ -16,6 +9,23 @@ The simulator models a multi-joint robotic arm where each joint is independently
 
 ## Development Notes
 This project was built as a learning exercise in C++ and motion control systems. Documentation and AI assistance (Claude) was consulted throughout development to understand concepts such as PID control, rotational physics and language syntax. Architectural decisions, design choices and debugging work are my own.
+
+### Built With
+- C++17
+- CMake
+- pybind11
+- PyQt6
+- Linux
+- Google Test
+- g++
+- Git
+
+## Concepts
+- PID Control theory
+- C++/Python interop
+- Rotational physics simulation
+- 2d kinematics
+- PyQt6 GUI
 
 ### Challenges
 - Applying PID control theory and rotational physics, torque calculations
