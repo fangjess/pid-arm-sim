@@ -20,7 +20,7 @@ This project was built as a learning exercise in C++ and motion control systems.
 - g++
 - Git
 
-## Concepts
+### Concepts
 - PID Control theory
 - C++/Python interop
 - Rotational physics simulation
