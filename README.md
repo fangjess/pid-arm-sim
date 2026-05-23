@@ -7,6 +7,9 @@ The simulator models a multi-joint robotic arm where each joint is independently
 - Live tuning of PID formula: adjust Kp multiplier to change motor aggressiveness
 - Effect of gravity on movement of vertical-axis arms: force of gravity affects torque applied to arms pitching up/down
 
+## Demo
+https://github.com/user-attachments/assets/8e6708c7-718d-4ad2-9a7e-de59c03dfdc0
+
 ## Development Notes
 This project was built as a learning exercise in C++ and motion control systems. Documentation and AI assistance (Claude) was consulted throughout development to understand concepts such as PID control, rotational physics and language syntax. Architectural decisions, design choices and debugging work are my own.
 
@@ -32,8 +35,6 @@ This project was built as a learning exercise in C++ and motion control systems.
 - Using CMake build system
 - PyQt6 devlopment, canvas rendering, foreshortening
 
-## Demo
-https://github.com/user-attachments/assets/8e6708c7-718d-4ad2-9a7e-de59c03dfdc0
 
 ## Class Diagram
 <img width="1320" height="1297" alt="UML class" src="https://github.com/user-attachments/assets/8ca3ae89-a693-4d6b-a0e7-5ff2c8ecb845" />
